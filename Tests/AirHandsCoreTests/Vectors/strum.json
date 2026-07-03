@@ -1,0 +1,795 @@
+[
+  {
+    "name": "fast-sweep-strums-each-zone-in-order",
+    "config": {
+      "strumVelocity": 1.2,
+      "vMax": 4,
+      "cooldownMs": 80
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.05,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.15000000000000002,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 32,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.25,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 32
+          }
+        ]
+      },
+      {
+        "t": 48,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.35000000000000003,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 48
+          }
+        ]
+      },
+      {
+        "t": 64,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.45,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 64
+          }
+        ]
+      },
+      {
+        "t": 80,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.55,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 80
+          }
+        ]
+      },
+      {
+        "t": 96,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.6500000000000001,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 96
+          }
+        ]
+      },
+      {
+        "t": 112,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.7500000000000001,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 112
+          }
+        ]
+      },
+      {
+        "t": 128,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.8500000000000001,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 128
+          }
+        ]
+      },
+      {
+        "t": 144,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.9500000000000001,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 144
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 0,
+        "kind": "strike",
+        "zoneId": "z1",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      },
+      {
+        "frame": 2,
+        "kind": "strike",
+        "zoneId": "z2",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      },
+      {
+        "frame": 4,
+        "kind": "strike",
+        "zoneId": "z3",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      },
+      {
+        "frame": 6,
+        "kind": "strike",
+        "zoneId": "z4",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      },
+      {
+        "frame": 8,
+        "kind": "strike",
+        "zoneId": "z5",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      }
+    ]
+  },
+  {
+    "name": "slow-drift-is-silent",
+    "config": {
+      "strumVelocity": 1.2,
+      "vMax": 4,
+      "cooldownMs": 80
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.05,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.15000000000000002,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 32,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.25,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 32
+          }
+        ]
+      },
+      {
+        "t": 48,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.35000000000000003,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 48
+          }
+        ]
+      },
+      {
+        "t": 64,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.45,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 64
+          }
+        ]
+      },
+      {
+        "t": 80,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.55,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 80
+          }
+        ]
+      },
+      {
+        "t": 96,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.6500000000000001,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 96
+          }
+        ]
+      },
+      {
+        "t": 112,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.7500000000000001,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 112
+          }
+        ]
+      },
+      {
+        "t": 128,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.8500000000000001,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 128
+          }
+        ]
+      },
+      {
+        "t": 144,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.9500000000000001,
+            "y": 0.5,
+            "vx": 0.4,
+            "vy": 0,
+            "lastSeenMs": 144
+          }
+        ]
+      }
+    ],
+    "expected": []
+  },
+  {
+    "name": "leftward-sweep-velocity-scales",
+    "config": {
+      "strumVelocity": 1.2,
+      "vMax": 4,
+      "cooldownMs": 80
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.9,
+            "y": 0.5,
+            "vx": -4,
+            "vy": 0,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.7,
+            "y": 0.5,
+            "vx": -4,
+            "vy": 0,
+            "lastSeenMs": 16
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 0,
+        "kind": "strike",
+        "zoneId": "z5",
+        "fingerId": "right-index",
+        "velocity": 1
+      },
+      {
+        "frame": 1,
+        "kind": "strike",
+        "zoneId": "z4",
+        "fingerId": "right-index",
+        "velocity": 1
+      }
+    ]
+  },
+  {
+    "name": "cooldown-blocks-immediate-retrigger",
+    "config": {
+      "strumVelocity": 1.2,
+      "vMax": 4,
+      "cooldownMs": 80
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.45,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 40,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.5,
+            "vx": -3,
+            "vy": 0,
+            "lastSeenMs": 40
+          }
+        ]
+      },
+      {
+        "t": 150,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.45,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 150
+          }
+        ]
+      },
+      {
+        "t": 200,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.5,
+            "vx": -3,
+            "vy": 0,
+            "lastSeenMs": 200
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 0,
+        "kind": "strike",
+        "zoneId": "z2",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      },
+      {
+        "frame": 1,
+        "kind": "strike",
+        "zoneId": "z3",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      },
+      {
+        "frame": 3,
+        "kind": "strike",
+        "zoneId": "z3",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      },
+      {
+        "frame": 4,
+        "kind": "strike",
+        "zoneId": "z2",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      }
+    ]
+  },
+  {
+    "name": "deceleration-ends-strum",
+    "config": {
+      "strumVelocity": 1.2,
+      "vMax": 4,
+      "cooldownMs": 80
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.5,
+            "vx": 0.2,
+            "vy": 0,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 200,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.5,
+            "vx": 0.2,
+            "vy": 0,
+            "lastSeenMs": 200
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 0,
+        "kind": "strike",
+        "zoneId": "z1",
+        "fingerId": "right-index",
+        "velocity": 0.75
+      }
+    ]
+  }
+]

@@ -1,0 +1,1323 @@
+[
+  {
+    "name": "full-lifecycle-strike-then-release",
+    "config": {
+      "strikeVelocity": 0.5,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": null,
+      "fingers": null
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.45,
+            "vx": 0,
+            "vy": 1,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 33,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 1.4,
+            "lastSeenMs": 33
+          }
+        ]
+      },
+      {
+        "t": 50,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.52,
+            "vx": 0,
+            "vy": 0.6,
+            "lastSeenMs": 50
+          }
+        ]
+      },
+      {
+        "t": 66,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.52,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 66
+          }
+        ]
+      },
+      {
+        "t": 83,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.45,
+            "vx": 0,
+            "vy": -0.5,
+            "lastSeenMs": 83
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 3,
+        "kind": "strike",
+        "zoneId": "z2",
+        "fingerId": "right-index",
+        "velocity": 0.4666666666666666
+      },
+      {
+        "frame": 5,
+        "kind": "release",
+        "zoneId": "z2",
+        "fingerId": "right-index"
+      }
+    ]
+  },
+  {
+    "name": "horizontal-sweep-is-silent",
+    "config": {
+      "strikeVelocity": 0.5,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": null,
+      "fingers": null
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.05,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.09736842105263158,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 32,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.14473684210526316,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 32
+          }
+        ]
+      },
+      {
+        "t": 48,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.19210526315789472,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 48
+          }
+        ]
+      },
+      {
+        "t": 64,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.23947368421052634,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 64
+          }
+        ]
+      },
+      {
+        "t": 80,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.2868421052631579,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 80
+          }
+        ]
+      },
+      {
+        "t": 96,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.33421052631578946,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 96
+          }
+        ]
+      },
+      {
+        "t": 112,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.381578947368421,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 112
+          }
+        ]
+      },
+      {
+        "t": 128,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.42894736842105263,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 128
+          }
+        ]
+      },
+      {
+        "t": 144,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.4763157894736842,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 144
+          }
+        ]
+      },
+      {
+        "t": 160,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5236842105263158,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 160
+          }
+        ]
+      },
+      {
+        "t": 176,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5710526315789475,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 176
+          }
+        ]
+      },
+      {
+        "t": 192,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.618421052631579,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 192
+          }
+        ]
+      },
+      {
+        "t": 208,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.6657894736842106,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 208
+          }
+        ]
+      },
+      {
+        "t": 224,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.7131578947368421,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 224
+          }
+        ]
+      },
+      {
+        "t": 240,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.7605263157894737,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 240
+          }
+        ]
+      },
+      {
+        "t": 256,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.8078947368421053,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 256
+          }
+        ]
+      },
+      {
+        "t": 272,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.855263157894737,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 272
+          }
+        ]
+      },
+      {
+        "t": 288,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.9026315789473685,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 288
+          }
+        ]
+      },
+      {
+        "t": 304,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.9500000000000001,
+            "y": 0.5,
+            "vx": 3,
+            "vy": 0,
+            "lastSeenMs": 304
+          }
+        ]
+      }
+    ],
+    "expected": []
+  },
+  {
+    "name": "velocity-scales-with-descent-speed",
+    "config": {
+      "strikeVelocity": 0.5,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": null,
+      "fingers": null
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 2.43,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 2.7,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 33,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.55,
+            "vx": 0,
+            "vy": 0.81,
+            "lastSeenMs": 33
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 2,
+        "kind": "strike",
+        "zoneId": "z1",
+        "fingerId": "right-index",
+        "velocity": 0.9
+      }
+    ]
+  },
+  {
+    "name": "boundary-jitter-held-by-hysteresis",
+    "config": {
+      "strikeVelocity": 0.5,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": null,
+      "fingers": null
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 1.2,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0.4,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 32,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.185,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 32
+          }
+        ]
+      },
+      {
+        "t": 48,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.415,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 48
+          }
+        ]
+      },
+      {
+        "t": 64,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.185,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 64
+          }
+        ]
+      },
+      {
+        "t": 80,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.415,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 80
+          }
+        ]
+      },
+      {
+        "t": 96,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.185,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 96
+          }
+        ]
+      },
+      {
+        "t": 112,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.415,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 112
+          }
+        ]
+      },
+      {
+        "t": 128,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.185,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 128
+          }
+        ]
+      },
+      {
+        "t": 144,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.415,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 144
+          }
+        ]
+      },
+      {
+        "t": 160,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.185,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 160
+          }
+        ]
+      },
+      {
+        "t": 176,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.415,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 176
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 1,
+        "kind": "strike",
+        "zoneId": "z2",
+        "fingerId": "right-index",
+        "velocity": 0.39999999999999997
+      }
+    ]
+  },
+  {
+    "name": "lost-finger-releases-after-grace",
+    "config": {
+      "strikeVelocity": 0.5,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": null,
+      "fingers": null
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 1.2,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.3,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0.4,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 100,
+        "fingers": []
+      },
+      {
+        "t": 150,
+        "fingers": []
+      }
+    ],
+    "expected": [
+      {
+        "frame": 1,
+        "kind": "strike",
+        "zoneId": "z2",
+        "fingerId": "right-index",
+        "velocity": 0.39999999999999997
+      },
+      {
+        "frame": 3,
+        "kind": "release",
+        "zoneId": "z2",
+        "fingerId": "right-index"
+      }
+    ]
+  },
+  {
+    "name": "drum-profile-ignores-ring-and-auto-releases",
+    "config": {
+      "strikeVelocity": 0.9,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": 150,
+      "fingers": [
+        "index",
+        "middle"
+      ]
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-ring",
+            "x": 0.3,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 2,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-ring",
+            "x": 0.3,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0.5,
+            "lastSeenMs": 16
+          }
+        ]
+      },
+      {
+        "t": 32,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 1.5,
+            "lastSeenMs": 32
+          }
+        ]
+      },
+      {
+        "t": 48,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0.4,
+            "lastSeenMs": 48
+          }
+        ]
+      },
+      {
+        "t": 100,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 100
+          }
+        ]
+      },
+      {
+        "t": 210,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0,
+            "lastSeenMs": 210
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 3,
+        "kind": "strike",
+        "zoneId": "z3",
+        "fingerId": "right-index",
+        "velocity": 0.5
+      },
+      {
+        "frame": 5,
+        "kind": "release",
+        "zoneId": "z3",
+        "fingerId": "right-index"
+      }
+    ]
+  },
+  {
+    "name": "two-fingers-strike-independently",
+    "config": {
+      "strikeVelocity": 0.5,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": null,
+      "fingers": null
+    },
+    "zones": [
+      {
+        "id": "z1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z2",
+        "rect": {
+          "x": 0.2,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z3",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z4",
+        "rect": {
+          "x": 0.6000000000000001,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "z5",
+        "rect": {
+          "x": 0.8,
+          "y": 0,
+          "width": 0.2,
+          "height": 1
+        },
+        "layer": 0
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 1.2,
+            "lastSeenMs": 0
+          },
+          {
+            "id": "right-middle",
+            "x": 0.5,
+            "y": 0.4,
+            "vx": 0,
+            "vy": 1.2,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.1,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0.4,
+            "lastSeenMs": 16
+          },
+          {
+            "id": "right-middle",
+            "x": 0.5,
+            "y": 0.5,
+            "vx": 0,
+            "vy": 0.4,
+            "lastSeenMs": 16
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 1,
+        "kind": "strike",
+        "zoneId": "z1",
+        "fingerId": "right-index",
+        "velocity": 0.39999999999999997
+      },
+      {
+        "frame": 1,
+        "kind": "strike",
+        "zoneId": "z3",
+        "fingerId": "right-middle",
+        "velocity": 0.39999999999999997
+      }
+    ]
+  },
+  {
+    "name": "black-key-priority-strike",
+    "config": {
+      "strikeVelocity": 0.5,
+      "vMax": 3,
+      "releaseVelocity": 0.3,
+      "hysteresisMargin": 0.15,
+      "lostGraceMs": 120,
+      "maxDescentMs": 180,
+      "autoReleaseMs": null,
+      "fingers": null
+    },
+    "zones": [
+      {
+        "id": "white-1",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0.5,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "white-2",
+        "rect": {
+          "x": 0.5,
+          "y": 0,
+          "width": 0.5,
+          "height": 1
+        },
+        "layer": 0
+      },
+      {
+        "id": "black-1",
+        "rect": {
+          "x": 0.4,
+          "y": 0,
+          "width": 0.2,
+          "height": 0.6
+        },
+        "layer": 1
+      }
+    ],
+    "frames": [
+      {
+        "t": 0,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5,
+            "y": 0.2,
+            "vx": 0,
+            "vy": 1.2,
+            "lastSeenMs": 0
+          }
+        ]
+      },
+      {
+        "t": 16,
+        "fingers": [
+          {
+            "id": "right-index",
+            "x": 0.5,
+            "y": 0.3,
+            "vx": 0,
+            "vy": 0.4,
+            "lastSeenMs": 16
+          }
+        ]
+      }
+    ],
+    "expected": [
+      {
+        "frame": 1,
+        "kind": "strike",
+        "zoneId": "black-1",
+        "fingerId": "right-index",
+        "velocity": 0.39999999999999997
+      }
+    ]
+  }
+]
