@@ -11,6 +11,7 @@ let package = Package(
         .library(name: "AirHandsCore", targets: ["AirHandsCore"]),
         .library(name: "AirHandsVision", targets: ["AirHandsVision"]),
         .executable(name: "airhands-conformance", targets: ["airhands-conformance"]),
+        .executable(name: "aircursor", targets: ["aircursor"]),
     ],
     targets: [
         .target(name: "AirHandsCore"),
@@ -21,6 +22,7 @@ let package = Package(
         // CLI runner — works without Xcode (Command Line Tools have no XCTest):
         //   swift run airhands-conformance
         .executableTarget(name: "airhands-conformance", dependencies: ["ConformanceKit"]),
+        .executableTarget(name: "aircursor", dependencies: ["AirHandsCore", "AirHandsVision"]),
         // Standard `swift test` entry point for environments with Xcode.
         .testTarget(
             name: "AirHandsCoreTests",
