@@ -8,8 +8,9 @@ import Vision
 ///
 /// Coordinates match the AirHands convention: origin top-left, x mirrored so
 /// the user's rightward motion moves right on screen (selfie view).
-public final class VisionHandPoseSource: NSObject, HandPoseSource {
+public final class VisionHandPoseSource: NSObject, HandFrameSource {
     public var onFrame: (([RawFingertip], Double) -> Void)?
+    public var onHands: (([RawHand], Double) -> Void)?
 
     /// Minimum Vision confidence for a fingertip to be reported.
     public var minConfidence: Float = 0.3
@@ -76,6 +77,22 @@ extension VisionHandPoseSource: AVCaptureVideoDataOutputSampleBufferDelegate {
         (.littleTip, .pinky),
     ]
 
+    private static func normalized(
+        _ point: VNRecognizedPoint,
+        mirror: Bool
+    ) -> Point {
+        // Vision uses a bottom-left origin; AirHands uses top-left.
+        Point(x: mirror ? 1 - point.location.x : point.location.x, y: 1 - point.location.y)
+    }
+
+    private func normalizedPoint(
+        _ joint: VNHumanHandPoseObservation.JointName,
+        in points: [VNHumanHandPoseObservation.JointName: VNRecognizedPoint]
+    ) -> Point? {
+        guard let point = points[joint], point.confidence >= minConfidence else { return nil }
+        return Self.normalized(point, mirror: mirror)
+    }
+
     public func captureOutput(
         _ output: AVCaptureOutput,
         didOutput sampleBuffer: CMSampleBuffer,
@@ -89,6 +106,7 @@ extension VisionHandPoseSource: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
 
         var tips: [RawFingertip] = []
+        var hands: [RawHand] = []
         for observation in request.results ?? [] {
             // Vision reports chirality as seen by the camera; mirroring for the
             // user swaps it (same convention as the MediaPipe web adapter).
@@ -101,17 +119,36 @@ extension VisionHandPoseSource: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
 
             guard let points = try? observation.recognizedPoints(.all) else { continue }
+            var handTips: [RawFingertip] = []
             for (joint, finger) in Self.jointMap {
                 guard let point = points[joint], point.confidence >= minConfidence else { continue }
-                // Vision uses a bottom-left origin; AirHands uses top-left.
-                let x = mirror ? 1 - point.location.x : point.location.x
-                let y = 1 - point.location.y
-                tips.append(RawFingertip(x: x, y: y, hand: hand, finger: finger))
+                let normalized = Self.normalized(point, mirror: mirror)
+                let tip = RawFingertip(x: normalized.x, y: normalized.y, hand: hand, finger: finger)
+                handTips.append(tip)
+                tips.append(tip)
             }
+
+            let wrist = normalizedPoint(.wrist, in: points)
+            let middleMCP = normalizedPoint(.middleMCP, in: points)
+            let palmCenter = middleMCP ?? wrist
+            let handScale: Double?
+            if let wrist, let middleMCP {
+                handScale = hypot(wrist.x - middleMCP.x, wrist.y - middleMCP.y)
+            } else {
+                handScale = nil
+            }
+            hands.append(
+                RawHand(
+                    hand: hand,
+                    fingertips: handTips,
+                    palmCenter: palmCenter,
+                    handScale: handScale
+                ))
         }
 
         let tsMs = ProcessInfo.processInfo.systemUptime * 1000
         onFrame?(tips, tsMs)
+        onHands?(hands, tsMs)
     }
 }
 #endif

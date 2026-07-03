@@ -23,7 +23,28 @@ public struct RawFingertip: Sendable {
     public var id: String { "\(hand.rawValue)-\(finger.rawValue)" }
 }
 
-public struct Point: Codable, Sendable {
+/// Hand-frame data in normalized [0,1] camera-or-zone space.
+public struct RawHand: Sendable {
+    public var hand: Hand
+    public var fingertips: [RawFingertip]
+    public var palmCenter: Point?
+    /// Stable intra-hand distance in normalized units, such as wrist-to-middle-MCP.
+    public var handScale: Double?
+
+    public init(
+        hand: Hand,
+        fingertips: [RawFingertip],
+        palmCenter: Point? = nil,
+        handScale: Double? = nil
+    ) {
+        self.hand = hand
+        self.fingertips = fingertips
+        self.palmCenter = palmCenter
+        self.handScale = handScale
+    }
+}
+
+public struct Point: Codable, Equatable, Sendable {
     public var x: Double
     public var y: Double
 
@@ -78,4 +99,10 @@ public protocol HandPoseSource: AnyObject {
     var onFrame: (([RawFingertip], _ timestampMs: Double) -> Void)? { get set }
     func start() throws
     func stop()
+}
+
+/// Optional full-hand frame capability for sources that can provide palm and scale landmarks.
+public protocol HandFrameSource: HandPoseSource {
+    /// Normalized, mirrored-for-the-user hand frames plus a monotonic timestamp.
+    var onHands: (([RawHand], _ timestampMs: Double) -> Void)? { get set }
 }

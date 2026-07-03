@@ -6,12 +6,15 @@ public enum LatencyProfile: Sendable {
     case balanced
     /// Steadiest cursor, laziest strikes.
     case stable
+    /// Heavy low-speed stabilization for pointer dwell without retuning strikes.
+    case pointer
 
     var filterParams: OneEuroParams {
         switch self {
         case .crisp: return OneEuroParams(minCutoff: 1.0, beta: 0.8, dCutoff: 1.0)
         case .balanced: return .default
         case .stable: return OneEuroParams(minCutoff: 0.3, beta: 0.5, dCutoff: 1.0)
+        case .pointer: return OneEuroParams(minCutoff: 0.15, beta: 1.2, dCutoff: 1.0)
         }
     }
 
@@ -20,6 +23,7 @@ public enum LatencyProfile: Sendable {
         case .crisp: config.maxDescentMs = 110
         case .balanced: break
         case .stable: config.maxDescentMs = 220
+        case .pointer: break
         }
     }
 }
@@ -40,6 +44,8 @@ public final class GestureSession {
     public var onEvent: ((GestureEvent) -> Void)?
     /// Filtered fingertips each frame, for cursors/visual feedback.
     public var onFingers: (([TrackedFinger]) -> Void)?
+    /// Raw full-hand frames each frame, when the source provides them.
+    public var onHands: (([RawHand], Double) -> Void)?
 
     private let source: HandPoseSource
     private let tracker: FingertipTracker
@@ -64,6 +70,11 @@ public final class GestureSession {
 
         source.onFrame = { [weak self] tips, tsMs in
             self?.process(tips, tsMs: tsMs)
+        }
+        if let handSource = source as? HandFrameSource {
+            handSource.onHands = { [weak self] hands, tsMs in
+                self?.onHands?(hands, tsMs)
+            }
         }
     }
 
