@@ -25,12 +25,15 @@ AirHandsCore   (pure Swift, zero platform deps — the ported engine)
   ZoneIndex            layered hit zones, hysteresis inflation
   StrikeFSM            IDLE → DESCENT → strike → HELD → release
   StrumDetector        fast horizontal sweep = glissando across zones
+  PinchDetector        thumb-index click/grab primitive with hysteresis
   GestureSession       wires a HandPoseSource to the engine; latency profiles
   HandPoseSource       protocol: ([RawFingertip], timestampMs) frames
+  HandFrameSource      optional RawHand frames: fingertips + palm + hand scale
 
 AirHandsVision (Apple adapter)
   VisionHandPoseSource AVFoundation camera → VNDetectHumanHandPoseRequest
-                       → mirrored, normalized fingertips (macOS + iOS)
+                       → mirrored, normalized fingertips and RawHand frames
+                         (macOS + iOS)
 
 ConformanceKit + airhands-conformance
   Golden-vector replay; the CLI works on Command Line Tools-only machines
@@ -59,8 +62,59 @@ Instead of exposing six thresholds, `GestureSession` ships three profiles —
 (`maxDescentMs`) and smoothing lag (`minCutoff`) against jitter. Raw configs
 stay public and live-tunable for anyone who wants the dials.
 
-## Out of scope for v0.1
+v0.2 adds `.pointer` for cursor dwell: `OneEuroParams(minCutoff: 0.15,
+beta: 1.2, dCutoff: 1.0)`. It deliberately does not modify
+`GestureConfig.maxDescentMs`; strike confirmation latency is not part of the
+pointer use case.
 
-visionOS/ARKit adapter (roadmap; contribution target), demo app, Android/
+## Hand frames
+
+`RawFingertip` remains the stable minimum input contract for strike and strum
+ports. Sources that can expose more of the 21-landmark hand skeleton may also
+conform to `HandFrameSource` and emit `RawHand` frames:
+
+- `hand`: `.left` or `.right` after the same mirroring/chirality convention as
+  fingertips.
+- `fingertips`: the existing normalized fingertips for that hand.
+- `palmCenter`: a normalized palm proxy for cursor anchoring.
+- `handScale`: a stable normalized intra-hand distance used to make gestures
+  comparable across hand sizes and camera depth.
+
+The Apple Vision adapter uses `.middleMCP` as `palmCenter`, falling back to
+`.wrist` if middle MCP is not confidently available. `handScale` is the
+confidence-gated wrist-to-middle-MCP distance. Both joints are available through
+`VNDetectHumanHandPoseRequest.recognizedPoints(.all)` on the supported macOS 13+
+and iOS 16+ deployment targets.
+
+`GestureSession.onHands` is an additive pass-through for apps that prefer to
+subscribe at the session layer. The base `HandPoseSource` protocol did not gain
+a new stored callback requirement, because that would break existing source
+conformers; `HandFrameSource` is the additive full-hand capability.
+
+## Pinch detector
+
+`PinchDetector` is pure `AirHandsCore` and processes `[RawHand]` frames into:
+
+- `.pinchBegan(hand, at: Point)`
+- `.pinchMoved(hand, at: Point)`
+- `.pinchEnded(hand, at: Point)`
+
+Strength is `distance(thumbTip, indexTip) / handScale`; if `handScale` is nil
+or invalid, the detector falls back to `0.25` normalized units. The emitted
+point is the filtered thumb/index midpoint. Default thresholds are:
+
+- `beginThreshold`: `0.35`
+- `endThreshold`: `0.55`
+- `minHoldMs`: `40`
+
+The begin path is debounced: a hand must remain at or below the begin threshold
+for `minHoldMs` before `.pinchBegan` fires. Once active, the detector emits
+`.pinchMoved` while strength stays below the end threshold, then emits
+`.pinchEnded` when strength reaches or exceeds `0.55`. State is tracked
+independently per hand.
+
+## Out of scope for v0.2 wave 1
+
+AirCursor demo app, OS cursor/window control, visionOS/ARKit adapter, Android/
 Kotlin port, MIDI output. The vector suite is designed so a future Rust
 unification (single core, uniffi bindings) stays cheap.

@@ -2,8 +2,8 @@
 
 **Instrument-grade hand-gesture events from any camera.** A Swift package that
 turns hand tracking into velocity-sensitive *strikes*, *holds*, *releases*, and
-*strums* — the difference between "my hand is at (x, y)" and "I just struck
-that key at velocity 0.72".
+*strums*, and pointer-grade *pinches* — the difference between "my hand is at
+(x, y)" and "I just struck that key at velocity 0.72" or "I just grabbed this".
 
 Extracted from [air-music](https://github.com/divyanshgandhi/air-music), where
 the same engine plays a piano, drum kit, koto, and handpan in the browser.
@@ -21,6 +21,8 @@ gesture *means* something. AirHands is the layer in between:
   and a grace window for tracking dropouts.
 - **Strums.** A fast horizontal sweep is its own gesture: every zone crossed
   fires, velocity proportional to sweep speed.
+- **Pinches.** Thumb-index pinches are scale-normalized per hand, debounced,
+  and hysteretic for click/grab style interactions.
 
 ## Usage
 
@@ -50,8 +52,29 @@ session.onFingers = { fingers in updateCursors(fingers) }   // filtered, per-fra
 try session.start()
 ```
 
+Pointer-style pinch detection uses full hand frames when a source provides
+them:
+
+```swift
+let source = VisionHandPoseSource()
+let session = GestureSession(source: source, zones: [], profile: .pointer)
+let pinch = PinchDetector()
+
+session.onHands = { hands, timestampMs in
+    for event in pinch.process(hands, timestampMs: timestampMs) {
+        switch event {
+        case let .pinchBegan(hand, at): beginGrab(hand, at)
+        case let .pinchMoved(hand, at): drag(hand, at)
+        case let .pinchEnded(hand, at): endGrab(hand, at)
+        }
+    }
+}
+```
+
 Bring your own landmark source by conforming to `HandPoseSource` — MediaPipe,
 ARKit, a replay file — the engine doesn't care where fingertips come from.
+Sources that also provide palm and scale data can conform to `HandFrameSource`
+and emit `RawHand` frames through `onHands`.
 
 ## The conformance suite (how "the feel" stays portable)
 
@@ -81,6 +104,7 @@ framework — use the runner there).
 
 ## Roadmap
 
+- [x] Pointer primitives: `RawHand`, `.pointer` profile, scale-normalized pinch detector
 - visionOS adapter (ARKit `HandTrackingProvider`, 3D strikes with real depth)
 - Demo app (macOS SwiftUI)
 - Kotlin/Android port against the same vectors

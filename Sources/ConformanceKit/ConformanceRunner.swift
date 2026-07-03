@@ -167,4 +167,191 @@ public enum ConformanceRunner {
         print("ran \(total) scenarios (\(fsmScenarios.count) fsm, \(strumScenarios.count) strum, \(euroScenarios.count) one-euro)")
         return failures
     }
+
+    /// Runs pure Swift smoke tests for APIs that are not part of the TypeScript golden vectors.
+    public static func runSelfTests() -> [ConformanceFailure] {
+        let scenarios: [(String, () -> String?)] = [
+            ("pinch begin/end hysteresis", testPinchHysteresis),
+            ("pinch begin debounce", testPinchDebounce),
+            ("pinch scale normalization", testPinchScaleNormalization),
+            ("raw hand session plumbing", testRawHandSessionPlumbing),
+        ]
+
+        var failures: [ConformanceFailure] = []
+        for (name, test) in scenarios {
+            if let detail = test() {
+                print("self-test/\(name): FAIL — \(detail)")
+                failures.append(ConformanceFailure(scenario: "self-test/\(name)", detail: detail))
+            } else {
+                print("self-test/\(name): PASS")
+            }
+        }
+        print("ran \(scenarios.count) self-test scenarios")
+        return failures
+    }
+}
+
+private func rawHand(
+    _ hand: Hand = .right,
+    thumb: Point,
+    index: Point,
+    handScale: Double? = 1
+) -> RawHand {
+    RawHand(
+        hand: hand,
+        fingertips: [
+            RawFingertip(x: thumb.x, y: thumb.y, hand: hand, finger: .thumb),
+            RawFingertip(x: index.x, y: index.y, hand: hand, finger: .index),
+        ],
+        palmCenter: Point(x: 0.5, y: 0.6),
+        handScale: handScale
+    )
+}
+
+private func eventKind(_ event: PinchEvent) -> String {
+    switch event {
+    case .pinchBegan: return "began"
+    case .pinchMoved: return "moved"
+    case .pinchEnded: return "ended"
+    }
+}
+
+private func requireKinds(_ got: [PinchEvent], _ expected: [String]) -> String? {
+    let kinds = got.map(eventKind)
+    return kinds == expected ? nil : "expected events \(expected), got \(kinds)"
+}
+
+private func testPinchHysteresis() -> String? {
+    let detector = PinchDetector()
+    var events: [PinchEvent] = []
+
+    events += detector.process(
+        [rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.3, y: 0.5))],
+        timestampMs: 0
+    )
+    if let failure = requireKinds(events, []) { return "t0: \(failure)" }
+
+    events = detector.process(
+        [rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.3, y: 0.5))],
+        timestampMs: 40
+    )
+    if let failure = requireKinds(events, ["began"]) { return "t40: \(failure)" }
+
+    events = detector.process(
+        [rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.45, y: 0.5))],
+        timestampMs: 80
+    )
+    if let failure = requireKinds(events, ["moved"]) { return "t80: \(failure)" }
+
+    events = detector.process(
+        [rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.56, y: 0.5))],
+        timestampMs: 120
+    )
+    if let failure = requireKinds(events, ["ended"]) { return "t120: \(failure)" }
+
+    return nil
+}
+
+private func testPinchDebounce() -> String? {
+    let detector = PinchDetector()
+    let pinched = rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.3, y: 0.5))
+    let open = rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.4, y: 0.5))
+
+    if let failure = requireKinds(detector.process([pinched], timestampMs: 0), []) {
+        return "t0: \(failure)"
+    }
+    if let failure = requireKinds(detector.process([pinched], timestampMs: 39), []) {
+        return "t39: \(failure)"
+    }
+    if let failure = requireKinds(detector.process([open], timestampMs: 50), []) {
+        return "t50 reset: \(failure)"
+    }
+    if let failure = requireKinds(detector.process([pinched], timestampMs: 100), []) {
+        return "t100: \(failure)"
+    }
+    if let failure = requireKinds(detector.process([pinched], timestampMs: 140), ["began"]) {
+        return "t140: \(failure)"
+    }
+
+    return nil
+}
+
+private func testPinchScaleNormalization() -> String? {
+    let config = PinchConfig(minHoldMs: 0)
+    let fullScale = PinchDetector(config: config)
+    let halfScale = PinchDetector(config: config)
+
+    let fullEvents = fullScale.process(
+        [rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.1, y: 0.5), handScale: 0.3)],
+        timestampMs: 0
+    )
+    if let failure = requireKinds(fullEvents, ["began"]) {
+        return "full scale: \(failure)"
+    }
+
+    let halfEvents = halfScale.process(
+        [rawHand(thumb: Point(x: 0, y: 0.5), index: Point(x: 0.05, y: 0.5), handScale: 0.15)],
+        timestampMs: 0
+    )
+    if let failure = requireKinds(halfEvents, ["began"]) {
+        return "half scale: \(failure)"
+    }
+
+    return nil
+}
+
+private final class SelfTestHandSource: HandFrameSource {
+    var onFrame: (([RawFingertip], Double) -> Void)?
+    var onHands: (([RawHand], Double) -> Void)?
+    let hands: [RawHand]
+
+    init(hands: [RawHand]) {
+        self.hands = hands
+    }
+
+    func start() throws {
+        onFrame?(hands.flatMap(\.fingertips), 123)
+        onHands?(hands, 123)
+    }
+
+    func stop() {}
+}
+
+private func testRawHandSessionPlumbing() -> String? {
+    let expected = rawHand(
+        thumb: Point(x: 0.1, y: 0.2),
+        index: Point(x: 0.2, y: 0.2),
+        handScale: 0.4
+    )
+    let source = SelfTestHandSource(hands: [expected])
+    let session = GestureSession(source: source, zones: [])
+    var received: ([RawHand], Double)?
+    session.onHands = { hands, timestampMs in
+        received = (hands, timestampMs)
+    }
+
+    do {
+        try session.start()
+    } catch {
+        return "start threw \(error)"
+    }
+
+    guard let received else {
+        return "session did not forward onHands"
+    }
+    guard received.1 == 123 else {
+        return "expected timestamp 123, got \(received.1)"
+    }
+    guard received.0.count == 1 else {
+        return "expected 1 hand, got \(received.0.count)"
+    }
+    guard received.0[0].hand == expected.hand,
+          received.0[0].palmCenter == expected.palmCenter,
+          received.0[0].handScale == expected.handScale,
+          received.0[0].fingertips.count == expected.fingertips.count
+    else {
+        return "forwarded RawHand did not match source frame"
+    }
+
+    return nil
 }

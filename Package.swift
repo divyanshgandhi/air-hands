@@ -24,7 +24,7 @@ let package = Package(
         // Standard `swift test` entry point for environments with Xcode.
         .testTarget(
             name: "AirHandsCoreTests",
-            dependencies: ["ConformanceKit"],
+            dependencies: ["AirHandsCore", "ConformanceKit"],
             resources: [.copy("Vectors")]
         ),
     ]
