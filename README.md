@@ -1,5 +1,7 @@
 # AirHands
 
+[![CI](https://github.com/divyanshgandhi/air-hands/actions/workflows/ci.yml/badge.svg)](https://github.com/divyanshgandhi/air-hands/actions/workflows/ci.yml)
+
 **Instrument-grade hand-gesture events from any camera.** A Swift package that
 turns hand tracking into velocity-sensitive *strikes*, *holds*, *releases*, and
 *strums*, and pointer-grade *pinches* — the difference between "my hand is at
@@ -40,7 +42,7 @@ let session = GestureSession(
     zones: zones,
     config: .keys,                    // or .percussion, or roll your own GestureConfig
     strumConfig: .strings,            // optional: enables sweep-to-glissando
-    profile: .crisp                   // .crisp | .balanced | .stable latency trade-off
+    profile: .crisp                   // .crisp | .balanced | .stable | .pointer
 )
 session.onEvent = { event in
     switch event {
@@ -76,6 +78,39 @@ ARKit, a replay file — the engine doesn't care where fingertips come from.
 Sources that also provide palm and scale data can conform to `HandFrameSource`
 and emit `RawHand` frames through `onHands`.
 
+## AirCursor Demo
+
+`aircursor` is a macOS demo that turns the right-hand index fingertip into the
+real mouse cursor. A right-hand thumb-index pinch sends left mouse down, drag,
+and up events. The central camera region (`x,y` in `[0.15, 0.85]`) maps to the
+full main display so full-arm reach is not required.
+
+Run it from a terminal that has both Camera and Accessibility permissions:
+
+```sh
+swift run aircursor
+```
+
+Use dry-run mode to inspect the generated mouse events without posting them:
+
+```sh
+swift run aircursor --dry-run
+```
+
+Manual smoke test:
+
+```sh
+swift run aircursor --dry-run
+# grant camera permission if prompted
+# move your right index finger and confirm mouseMoved lines print
+# pinch thumb to index and confirm leftMouseDown / leftMouseDragged / leftMouseUp
+# press Ctrl+C to quit
+```
+
+For real cursor control, grant Accessibility permission to the invoking
+terminal in System Settings, run `swift run aircursor`, move with the right
+index fingertip, pinch to drag, and press Ctrl+C to quit.
+
 ## The conformance suite (how "the feel" stays portable)
 
 The gesture engine has a TypeScript reference implementation (air-music). It
@@ -99,12 +134,15 @@ framework — use the runner there).
 | Target | Contents |
 |---|---|
 | `AirHandsCore` | Pure Swift, zero platform deps: One Euro filter, fingertip tracker, strike FSM, strum detector, zones, `GestureSession` |
-| `AirHandsVision` | `VisionHandPoseSource`: AVFoundation camera → `VNDetectHumanHandPoseRequest` → normalized fingertips |
+| `AirHandsVision` | `VisionHandPoseSource`: AVFoundation camera → `VNDetectHumanHandPoseRequest` → normalized fingertips and hand frames |
 | `ConformanceKit` + `airhands-conformance` | Golden-vector verification |
+| `aircursor` | macOS camera-to-cursor demo using Vision, pointer filtering, and pinch drag |
 
 ## Roadmap
 
 - [x] Pointer primitives: `RawHand`, `.pointer` profile, scale-normalized pinch detector
+- [x] AirCursor macOS demo executable
+- [x] GitHub Actions CI
 - visionOS adapter (ARKit `HandTrackingProvider`, 3D strikes with real depth)
 - Demo app (macOS SwiftUI)
 - Kotlin/Android port against the same vectors

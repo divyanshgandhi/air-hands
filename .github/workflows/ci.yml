@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: swift build
+      - name: Golden-vector conformance
+        run: swift run airhands-conformance
+      - name: Self-tests
+        run: swift run airhands-conformance --self
+      - name: Swift tests
+        run: swift test
