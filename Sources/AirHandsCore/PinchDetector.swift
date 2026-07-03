@@ -4,17 +4,20 @@ public struct PinchConfig: Codable, Equatable, Sendable {
     public var beginThreshold: Double
     public var endThreshold: Double
     public var minHoldMs: Double
+    public var lostGraceMs: Double
     public var fallbackHandScale: Double
 
     public init(
         beginThreshold: Double = 0.35,
         endThreshold: Double = 0.55,
         minHoldMs: Double = 40,
+        lostGraceMs: Double = 120,
         fallbackHandScale: Double = 0.25
     ) {
         self.beginThreshold = beginThreshold
         self.endThreshold = endThreshold
         self.minHoldMs = minHoldMs
+        self.lostGraceMs = lostGraceMs
         self.fallbackHandScale = fallbackHandScale
     }
 
@@ -39,6 +42,7 @@ public final class PinchDetector {
         let fy: OneEuroFilter
         var phase: Phase = .idle
         var lastPoint: Point?
+        var lastSeenMs: Double?
     }
 
     private let config: PinchConfig
@@ -50,6 +54,7 @@ public final class PinchDetector {
 
     public func process(_ hands: [RawHand], timestampMs: Double) -> [PinchEvent] {
         var events: [PinchEvent] = []
+        let presentHands = Set(hands.map(\.hand))
 
         for hand in hands {
             guard let sample = Self.pinchSample(for: hand, fallbackHandScale: config.fallbackHandScale) else {
@@ -65,6 +70,7 @@ public final class PinchDetector {
                 y: state.fy.filter(sample.midpoint.y, timestampMs: timestampMs)
             )
             state.lastPoint = point
+            state.lastSeenMs = timestampMs
 
             switch state.phase {
             case .idle:
@@ -94,6 +100,26 @@ public final class PinchDetector {
             }
 
             states[hand.hand] = state
+        }
+
+        for (hand, existingState) in Array(states) where !presentHands.contains(hand) {
+            var state = existingState
+            switch state.phase {
+            case .idle:
+                continue
+            case .candidate:
+                state.phase = .idle
+                states[hand] = state
+            case .active:
+                guard let lastSeenMs = state.lastSeenMs else { continue }
+                if timestampMs - lastSeenMs > config.lostGraceMs {
+                    if let lastPoint = state.lastPoint {
+                        events.append(.pinchEnded(hand: hand, at: lastPoint))
+                    }
+                    state.phase = .idle
+                    states[hand] = state
+                }
+            }
         }
 
         return events

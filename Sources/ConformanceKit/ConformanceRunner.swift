@@ -174,6 +174,8 @@ public enum ConformanceRunner {
             ("pinch begin/end hysteresis", testPinchHysteresis),
             ("pinch begin debounce", testPinchDebounce),
             ("pinch scale normalization", testPinchScaleNormalization),
+            ("pinch active lost hand ends after grace", testPinchActiveLostHandEndsAfterGrace),
+            ("pinch candidate lost hand resets silently", testPinchCandidateLostHandResetsSilently),
             ("raw hand session plumbing", testRawHandSessionPlumbing),
         ]
 
@@ -219,6 +221,13 @@ private func eventKind(_ event: PinchEvent) -> String {
 private func requireKinds(_ got: [PinchEvent], _ expected: [String]) -> String? {
     let kinds = got.map(eventKind)
     return kinds == expected ? nil : "expected events \(expected), got \(kinds)"
+}
+
+private func pinchPoint(_ event: PinchEvent) -> Point {
+    switch event {
+    case let .pinchBegan(_, at), let .pinchMoved(_, at), let .pinchEnded(_, at):
+        return at
+    }
 }
 
 private func testPinchHysteresis() -> String? {
@@ -295,6 +304,61 @@ private func testPinchScaleNormalization() -> String? {
     )
     if let failure = requireKinds(halfEvents, ["began"]) {
         return "half scale: \(failure)"
+    }
+
+    return nil
+}
+
+private func testPinchActiveLostHandEndsAfterGrace() -> String? {
+    let detector = PinchDetector()
+    let hand = rawHand(thumb: Point(x: 0.2, y: 0.5), index: Point(x: 0.5, y: 0.5))
+
+    if let failure = requireKinds(detector.process([hand], timestampMs: 0), []) {
+        return "t0: \(failure)"
+    }
+    let began = detector.process([hand], timestampMs: 40)
+    if let failure = requireKinds(began, ["began"]) {
+        return "t40: \(failure)"
+    }
+    guard let beganEvent = began.first else {
+        return "missing began event"
+    }
+    let lastPoint = pinchPoint(beganEvent)
+
+    if let failure = requireKinds(detector.process([], timestampMs: 140), []) {
+        return "t140 absent: \(failure)"
+    }
+
+    let ended = detector.process([], timestampMs: 190)
+    if let failure = requireKinds(ended, ["ended"]) {
+        return "t190 absent: \(failure)"
+    }
+    guard let endedEvent = ended.first else {
+        return "missing ended event"
+    }
+    guard endedEvent == .pinchEnded(hand: .right, at: lastPoint) else {
+        return "expected ended at \(lastPoint), got \(endedEvent)"
+    }
+
+    if let failure = requireKinds(detector.process([], timestampMs: 350), []) {
+        return "t350 duplicate: \(failure)"
+    }
+
+    return nil
+}
+
+private func testPinchCandidateLostHandResetsSilently() -> String? {
+    let detector = PinchDetector()
+    let hand = rawHand(thumb: Point(x: 0.2, y: 0.5), index: Point(x: 0.5, y: 0.5))
+
+    if let failure = requireKinds(detector.process([hand], timestampMs: 0), []) {
+        return "t0 candidate: \(failure)"
+    }
+    if let failure = requireKinds(detector.process([], timestampMs: 10), []) {
+        return "t10 absent: \(failure)"
+    }
+    if let failure = requireKinds(detector.process([], timestampMs: 200), []) {
+        return "t200 absent: \(failure)"
     }
 
     return nil
