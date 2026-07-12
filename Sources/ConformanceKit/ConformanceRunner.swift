@@ -178,6 +178,9 @@ public enum ConformanceRunner {
             ("pinch candidate lost hand resets silently", testPinchCandidateLostHandResetsSilently),
             ("raw hand session plumbing", testRawHandSessionPlumbing),
             ("raw hand preserves full joints", testRawHandPreservesFullJoints),
+            ("intent engagement gate", testIntentEngagementGate),
+            ("intent grab ownership", testIntentGrabOwnership),
+            ("intent trackpad gestures", testIntentTrackpadGestures),
         ]
 
         var failures: [ConformanceFailure] = []
@@ -425,4 +428,55 @@ private func testRawHandPreservesFullJoints() -> String? {
     let wrist = Point(x: 0.4, y: 0.8)
     let hand = RawHand(hand: .right, joints: [.wrist: wrist])
     return hand.joints[.wrist] == wrist ? nil : "wrist joint missing"
+}
+
+private func poseHand(_ hand: Hand = .right, fingers: Int = 4, pinch: Bool = false, offsetX: Double = 0) -> RawHand {
+    var joints: [HandJoint: Point] = [
+        .wrist: Point(x: 0.5 + offsetX, y: 0.85),
+        .indexMCP: Point(x: 0.46 + offsetX, y: 0.65),
+        .indexPIP: Point(x: 0.46 + offsetX, y: 0.45),
+        .indexTip: Point(x: 0.46 + offsetX, y: 0.2),
+        .thumbTip: Point(x: (pinch ? 0.47 : 0.34) + offsetX, y: pinch ? 0.21 : 0.48),
+    ]
+    let definitions: [(HandJoint, HandJoint, Double)] = [
+        (.middlePIP, .middleTip, 0.50), (.ringPIP, .ringTip, 0.54), (.littlePIP, .littleTip, 0.58),
+    ]
+    for (index, definition) in definitions.enumerated() {
+        joints[definition.0] = Point(x: definition.2 + offsetX, y: 0.45)
+        joints[definition.1] = Point(x: definition.2 + offsetX, y: index + 2 <= fingers ? 0.2 : 0.6)
+    }
+    return RawHand(hand: hand, joints: joints, handScale: 0.3)
+}
+
+private func engagedArbiter() -> IntentArbiter {
+    let arbiter = IntentArbiter()
+    _ = arbiter.process(hands: [poseHand(.left), poseHand(.right)], timestampMs: 0)
+    _ = arbiter.process(hands: [poseHand(.left), poseHand(.right)], timestampMs: 300)
+    return arbiter
+}
+
+private func testIntentEngagementGate() -> String? {
+    let arbiter = IntentArbiter()
+    guard arbiter.process(hands: [poseHand()], timestampMs: 0).isEmpty else { return "dormant emitted input" }
+    _ = arbiter.process(hands: [poseHand(.left), poseHand(.right)], timestampMs: 0)
+    let events = arbiter.process(hands: [poseHand(.left), poseHand(.right)], timestampMs: 300)
+    return events == [.engagementChanged(true)] ? nil : "expected engagement, got \(events)"
+}
+
+private func testIntentGrabOwnership() -> String? {
+    let arbiter = engagedArbiter()
+    _ = arbiter.process(hands: [], timestampMs: 400)
+    let events = arbiter.process(hands: [poseHand(pinch: true)], timestampMs: 500)
+    guard events.contains(where: { if case .grabBegan = $0 { return true }; return false }) else { return "pinch did not grab" }
+    guard !events.contains(where: { if case .scroll = $0 { return true }; return false }) else { return "grab leaked scroll" }
+    return nil
+}
+
+private func testIntentTrackpadGestures() -> String? {
+    let arbiter = engagedArbiter()
+    _ = arbiter.process(hands: [], timestampMs: 400)
+    _ = arbiter.process(hands: [poseHand(fingers: 2)], timestampMs: 500)
+    let moved = RawHand(hand: .right, joints: poseHand(fingers: 2, offsetX: 0.05).joints, handScale: 0.3)
+    let events = arbiter.process(hands: [moved], timestampMs: 520)
+    return events.contains(where: { if case .scroll = $0 { return true }; return false }) ? nil : "two fingers did not scroll"
 }
