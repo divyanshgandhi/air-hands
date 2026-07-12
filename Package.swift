@@ -10,12 +10,14 @@ let package = Package(
     products: [
         .library(name: "AirHandsCore", targets: ["AirHandsCore"]),
         .library(name: "AirHandsVision", targets: ["AirHandsVision"]),
+        .library(name: "StarkWorkspaceCore", targets: ["StarkWorkspaceCore"]),
         .executable(name: "airhands-conformance", targets: ["airhands-conformance"]),
         .executable(name: "aircursor", targets: ["aircursor"]),
     ],
     targets: [
         .target(name: "AirHandsCore"),
         .target(name: "AirHandsVision", dependencies: ["AirHandsCore"]),
+        .target(name: "StarkWorkspaceCore", dependencies: ["AirHandsCore"]),
         // Shared verification logic: replays the golden vectors exported from
         // the TypeScript reference implementation.
         .target(name: "ConformanceKit", dependencies: ["AirHandsCore"]),
@@ -29,5 +31,6 @@ let package = Package(
             dependencies: ["AirHandsCore", "ConformanceKit"],
             resources: [.copy("Vectors")]
         ),
+        .testTarget(name: "StarkWorkspaceCoreTests", dependencies: ["StarkWorkspaceCore", "AirHandsCore"]),
     ]
 )
