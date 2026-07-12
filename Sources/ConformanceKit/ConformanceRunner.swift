@@ -177,6 +177,7 @@ public enum ConformanceRunner {
             ("pinch active lost hand ends after grace", testPinchActiveLostHandEndsAfterGrace),
             ("pinch candidate lost hand resets silently", testPinchCandidateLostHandResetsSilently),
             ("raw hand session plumbing", testRawHandSessionPlumbing),
+            ("raw hand preserves full joints", testRawHandPreservesFullJoints),
         ]
 
         var failures: [ConformanceFailure] = []
@@ -418,4 +419,10 @@ private func testRawHandSessionPlumbing() -> String? {
     }
 
     return nil
+}
+
+private func testRawHandPreservesFullJoints() -> String? {
+    let wrist = Point(x: 0.4, y: 0.8)
+    let hand = RawHand(hand: .right, joints: [.wrist: wrist])
+    return hand.joints[.wrist] == wrist ? nil : "wrist joint missing"
 }

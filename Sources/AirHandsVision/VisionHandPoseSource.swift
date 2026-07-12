@@ -69,7 +69,16 @@ public final class VisionHandPoseSource: NSObject, HandFrameSource {
 }
 
 extension VisionHandPoseSource: AVCaptureVideoDataOutputSampleBufferDelegate {
-    private static let jointMap: [(VNHumanHandPoseObservation.JointName, FingerID)] = [
+    private static let jointMap: [(VNHumanHandPoseObservation.JointName, HandJoint)] = [
+        (.wrist, .wrist),
+        (.thumbCMC, .thumbCMC), (.thumbMP, .thumbMP), (.thumbIP, .thumbIP), (.thumbTip, .thumbTip),
+        (.indexMCP, .indexMCP), (.indexPIP, .indexPIP), (.indexDIP, .indexDIP), (.indexTip, .indexTip),
+        (.middleMCP, .middleMCP), (.middlePIP, .middlePIP), (.middleDIP, .middleDIP), (.middleTip, .middleTip),
+        (.ringMCP, .ringMCP), (.ringPIP, .ringPIP), (.ringDIP, .ringDIP), (.ringTip, .ringTip),
+        (.littleMCP, .littleMCP), (.littlePIP, .littlePIP), (.littleDIP, .littleDIP), (.littleTip, .littleTip),
+    ]
+
+    private static let fingertipMap: [(VNHumanHandPoseObservation.JointName, FingerID)] = [
         (.thumbTip, .thumb),
         (.indexTip, .index),
         (.middleTip, .middle),
@@ -119,8 +128,14 @@ extension VisionHandPoseSource: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
 
             guard let points = try? observation.recognizedPoints(.all) else { continue }
+            var joints: [HandJoint: Point] = [:]
+            for (joint, mapped) in Self.jointMap {
+                guard let point = points[joint], point.confidence >= minConfidence else { continue }
+                joints[mapped] = Self.normalized(point, mirror: mirror)
+            }
+
             var handTips: [RawFingertip] = []
-            for (joint, finger) in Self.jointMap {
+            for (joint, finger) in Self.fingertipMap {
                 guard let point = points[joint], point.confidence >= minConfidence else { continue }
                 let normalized = Self.normalized(point, mirror: mirror)
                 let tip = RawFingertip(x: normalized.x, y: normalized.y, hand: hand, finger: finger)
@@ -140,6 +155,7 @@ extension VisionHandPoseSource: AVCaptureVideoDataOutputSampleBufferDelegate {
             hands.append(
                 RawHand(
                     hand: hand,
+                    joints: joints,
                     fingertips: handTips,
                     palmCenter: palmCenter,
                     handScale: handScale

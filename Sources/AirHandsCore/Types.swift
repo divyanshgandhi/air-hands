@@ -6,6 +6,15 @@ public enum FingerID: String, Codable, Sendable, CaseIterable {
     case thumb, index, middle, ring, pinky
 }
 
+public enum HandJoint: String, Codable, Sendable, CaseIterable {
+    case wrist
+    case thumbCMC, thumbMP, thumbIP, thumbTip
+    case indexMCP, indexPIP, indexDIP, indexTip
+    case middleMCP, middlePIP, middleDIP, middleTip
+    case ringMCP, ringPIP, ringDIP, ringTip
+    case littleMCP, littlePIP, littleDIP, littleTip
+}
+
 /// Fingertip in normalized [0,1] camera-or-zone space.
 public struct RawFingertip: Sendable {
     public var x: Double
@@ -26,6 +35,7 @@ public struct RawFingertip: Sendable {
 /// Hand-frame data in normalized [0,1] camera-or-zone space.
 public struct RawHand: Sendable {
     public var hand: Hand
+    public var joints: [HandJoint: Point]
     public var fingertips: [RawFingertip]
     public var palmCenter: Point?
     /// Stable intra-hand distance in normalized units, such as wrist-to-middle-MCP.
@@ -33,11 +43,13 @@ public struct RawHand: Sendable {
 
     public init(
         hand: Hand,
-        fingertips: [RawFingertip],
+        joints: [HandJoint: Point] = [:],
+        fingertips: [RawFingertip] = [],
         palmCenter: Point? = nil,
         handScale: Double? = nil
     ) {
         self.hand = hand
+        self.joints = joints
         self.fingertips = fingertips
         self.palmCenter = palmCenter
         self.handScale = handScale
