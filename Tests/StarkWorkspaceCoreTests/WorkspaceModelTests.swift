@@ -57,4 +57,12 @@ final class WorkspaceModelTests: XCTestCase {
         XCTAssertEqual(model.selectedPanel?.id, target.id)
         XCTAssertEqual(model.selectedPanel?.zIndex, model.panels.map(\.zIndex).max())
     }
+
+    func testDisengagingExitsOverview() {
+        let model = WorkspaceModel.demo
+        let controller = WorkspaceController(model: model)
+        controller.handle(.overview(true))
+        controller.handle(.engagementChanged(false))
+        XCTAssertFalse(model.isOverview)
+    }
 }

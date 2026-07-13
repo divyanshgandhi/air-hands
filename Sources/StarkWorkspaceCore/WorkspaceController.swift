@@ -15,7 +15,10 @@ public final class WorkspaceController {
         case let .engagementChanged(active):
             model.isEngaged = active
             model.status = active ? "Engaged" : "Dormant"
-            if !active { grabStart = nil }
+            if !active {
+                grabStart = nil
+                model.isOverview = false
+            }
         case let .pointerMoved(point):
             model.pointer = point
             selectPanel(at: point)

@@ -8,9 +8,11 @@ struct WorkspaceView: View {
         GeometryReader { proxy in
             ZStack {
                 Color.black.opacity(store.model.isEngaged ? 0.16 : 0.04)
-                ForEach(store.model.panels.sorted(by: { $0.zIndex < $1.zIndex })) { panel in
-                    if !panel.isMinimized {
-                        panelView(panel, in: proxy.size)
+                if store.model.isEngaged {
+                    ForEach(store.model.panels.sorted(by: { $0.zIndex < $1.zIndex })) { panel in
+                        if !panel.isMinimized {
+                            panelView(panel, in: proxy.size)
+                        }
                     }
                 }
                 AdaptiveHUD(store: store)
@@ -30,8 +32,11 @@ struct WorkspaceView: View {
 
     private func overviewFrame(_ panel: WorkspacePanel, in size: CGSize) -> NormalizedRect {
         guard let index = store.model.panels.firstIndex(where: { $0.id == panel.id }) else { return panel.frame }
-        let width = 0.26
-        return NormalizedRect(x: 0.08 + Double(index) * 0.29, y: 0.34, width: width, height: 0.30)
+        let column = index % 3
+        let row = index / 3
+        return NormalizedRect(x: 0.08 + Double(column) * 0.29,
+                              y: 0.16 + Double(row) * 0.36,
+                              width: 0.26, height: 0.30)
     }
 }
 
