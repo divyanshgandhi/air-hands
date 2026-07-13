@@ -12,6 +12,7 @@ final class AppStore: ObservableObject {
         return controller
     }()
     let windowBridge = WindowBridge()
+    let diagnostics = Diagnostics()
 
     func handle(_ event: InteractionEvent) {
         objectWillChange.send()

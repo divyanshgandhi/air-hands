@@ -111,6 +111,31 @@ For real cursor control, grant Accessibility permission to the invoking
 terminal in System Settings, run `swift run aircursor`, move with the right
 index fingertip, pinch to drag, and press Ctrl+C to quit.
 
+## Stark Workspace Demo
+
+`stark-workspace` is the native macOS spatial overlay. Start with synthetic
+mode: it needs no camera or Accessibility permission and continuously demonstrates
+engagement, pointing, grabbing, resizing, panel switching, and overview.
+
+```sh
+swift run stark-workspace --demo
+```
+
+Run the live camera experience from a terminal with Camera permission:
+
+```sh
+swift run stark-workspace
+```
+
+Hold both open palms for 300 ms to engage or disengage. While engaged, point
+with the right index finger, pinch thumb to index to grab, use two fingers to
+scroll or resize, swipe three fingers to switch panels, and spread four fingers
+for overview. Press Escape at any time to disengage. Accessibility permission
+adds real Mac window cards and allows focus, move, and resize; without it the
+native spatial panels remain fully usable.
+
+See [`docs/DEMO.md`](docs/DEMO.md) for the complete wake-up demo checklist.
+
 ## The conformance suite (how "the feel" stays portable)
 
 The gesture engine has a TypeScript reference implementation (air-music). It
@@ -137,6 +162,8 @@ framework — use the runner there).
 | `AirHandsVision` | `VisionHandPoseSource`: AVFoundation camera → `VNDetectHumanHandPoseRequest` → normalized fingertips and hand frames |
 | `ConformanceKit` + `airhands-conformance` | Golden-vector verification |
 | `aircursor` | macOS camera-to-cursor demo using Vision, pointer filtering, and pinch drag |
+| `StarkWorkspaceCore` | Pure workspace model: panels, selection, transforms, overview, and window commands |
+| `stark-workspace` | SwiftUI/AppKit hybrid overlay with synthetic and live-camera modes |
 
 ## Roadmap
 
@@ -144,7 +171,7 @@ framework — use the runner there).
 - [x] AirCursor macOS demo executable
 - [x] GitHub Actions CI
 - visionOS adapter (ARKit `HandTrackingProvider`, 3D strikes with real depth)
-- Demo app (macOS SwiftUI)
+- [x] Native macOS Stark workspace demo
 - Kotlin/Android port against the same vectors
 - MIDI event output
 

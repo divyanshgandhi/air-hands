@@ -13,7 +13,10 @@ final class CameraInteractionSource {
         source.onHands = { [weak self] hands, timestampMs in
             guard let self else { return }
             let events = arbiter.process(hands: hands, timestampMs: timestampMs)
-            Task { @MainActor in events.forEach(self.store.handle) }
+            Task { @MainActor in
+                self.store.diagnostics.record(capturedAtMs: timestampMs)
+                events.forEach(self.store.handle)
+            }
         }
         try source.start()
     }

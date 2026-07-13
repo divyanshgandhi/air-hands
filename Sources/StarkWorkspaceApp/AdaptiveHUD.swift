@@ -14,7 +14,8 @@ struct AdaptiveHUD: View {
                         .background(.black.opacity(0.65), in: Capsule())
                         .overlay(Capsule().stroke(store.model.isEngaged ? Color.cyan : Color.white.opacity(0.25)))
                     Spacer()
-                    Text("ESC  DISENGAGE").font(.system(size: 10, design: .monospaced)).foregroundStyle(.white.opacity(0.65))
+                    Text(String(format: "%.0f FPS  %.0f MS   ·   ESC DISENGAGE", store.diagnostics.fps, store.diagnostics.latencyMs))
+                        .font(.system(size: 10, design: .monospaced)).foregroundStyle(.white.opacity(0.65))
                 }
                 .padding(24)
                 Spacer()
