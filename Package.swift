@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "StarkWorkspaceCore", targets: ["StarkWorkspaceCore"]),
         .executable(name: "airhands-conformance", targets: ["airhands-conformance"]),
         .executable(name: "aircursor", targets: ["aircursor"]),
+        .executable(name: "stark-workspace", targets: ["StarkWorkspaceApp"]),
     ],
     targets: [
         .target(name: "AirHandsCore"),
@@ -25,6 +26,7 @@ let package = Package(
         //   swift run airhands-conformance
         .executableTarget(name: "airhands-conformance", dependencies: ["ConformanceKit"]),
         .executableTarget(name: "aircursor", dependencies: ["AirHandsCore", "AirHandsVision"]),
+        .executableTarget(name: "StarkWorkspaceApp", dependencies: ["AirHandsCore", "AirHandsVision", "StarkWorkspaceCore"]),
         // Standard `swift test` entry point for environments with Xcode.
         .testTarget(
             name: "AirHandsCoreTests",
