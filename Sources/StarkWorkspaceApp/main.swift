@@ -22,12 +22,14 @@ final class StarkWorkspaceApp: NSObject, NSApplicationDelegate {
         self.overlay = overlay
         overlay.orderFrontRegardless()
         installEscape()
+        store.loadSystemWindows()
 
         if CommandLine.arguments.contains("--demo") {
             let demo = DemoEventSource(store: store)
             self.demo = demo
             demo.start()
         } else {
+            if store.windowBridge.permission == .denied { store.windowBridge.requestPermission() }
             let camera = CameraInteractionSource(store: store)
             self.camera = camera
             do { try camera.start() }
