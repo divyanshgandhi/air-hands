@@ -30,4 +30,31 @@ final class WorkspaceModelTests: XCTestCase {
         controller.handle(.overview(true))
         XCTAssertTrue(model.isOverview)
     }
+
+    func testMinimizeSelectedPanel() {
+        let model = WorkspaceModel.demo
+        let controller = WorkspaceController(model: model)
+        let selected = model.selectedPanel!.id
+        controller.handle(.minimizeSelected)
+        XCTAssertTrue(model.panels.first { $0.id == selected }!.isMinimized)
+        XCTAssertNotEqual(model.selectedPanel?.id, selected)
+    }
+
+    func testDismissSelectedPanel() {
+        let model = WorkspaceModel.demo
+        let controller = WorkspaceController(model: model)
+        let selected = model.selectedPanel!.id
+        controller.handle(.dismissSelected)
+        XCTAssertFalse(model.panels.contains { $0.id == selected })
+        XCTAssertNotNil(model.selectedPanel)
+    }
+
+    func testPointingRaisesSelectedPanel() {
+        let model = WorkspaceModel.demo
+        let controller = WorkspaceController(model: model)
+        let target = model.panels[1]
+        controller.handle(.pointerMoved(Point(x: target.frame.x + 0.02, y: target.frame.y + 0.02)))
+        XCTAssertEqual(model.selectedPanel?.id, target.id)
+        XCTAssertEqual(model.selectedPanel?.zIndex, model.panels.map(\.zIndex).max())
+    }
 }

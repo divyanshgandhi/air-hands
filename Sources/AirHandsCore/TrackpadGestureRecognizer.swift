@@ -7,6 +7,8 @@ public enum TrackpadGestureEvent: Equatable, Sendable {
     case zoom(scaleDelta: Double)
     case switchWorkspace(direction: Int)
     case overview(Bool)
+    case minimizeSelected
+    case dismissSelected
 }
 
 public final class TrackpadGestureRecognizer {
@@ -54,6 +56,9 @@ public final class TrackpadGestureRecognizer {
 
         if extended == 3, abs(delta.x) > 0.03 {
             return [.switchWorkspace(direction: delta.x > 0 ? 1 : -1)]
+        }
+        if extended == 3, abs(delta.y) > 0.03 {
+            return [delta.y > 0 ? .minimizeSelected : .dismissSelected]
         }
         if extended == 2 {
             if let spread = fingerSpread(hand), let previousSpread,

@@ -13,9 +13,13 @@ final class DemoEventSource {
         .grabMoved(Point(x: 0.56, y: 0.48)),
         .grabEnded(Point(x: 0.56, y: 0.48)),
         .zoom(scaleDelta: 1.18),
+        .scroll(delta: Point(x: 0, y: 0.08)),
         .switchWorkspace(direction: 1),
         .overview(true),
         .overview(false),
+        .minimizeSelected,
+        .dismissSelected,
+        .engagementChanged(false),
     ]
 
     init(store: AppStore) { self.store = store }
@@ -28,7 +32,12 @@ final class DemoEventSource {
     }
 
     func advance() {
-        store.handle(events[step % events.count])
+        guard step < events.count else {
+            store.resetDemo()
+            step = 0
+            return
+        }
+        store.handle(events[step])
         step += 1
     }
 }

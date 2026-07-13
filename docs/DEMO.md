@@ -31,6 +31,8 @@ Accessibility**, then relaunch.
 | Two extended fingers moving together | Scroll |
 | Two-finger spread/compress | Resize selected panel |
 | Three-finger horizontal swipe | Switch panel/window |
+| Three-finger downward swipe | Minimize selected panel |
+| Three-finger upward swipe | Dismiss selected panel |
 | Four extended fingers | Enter overview |
 | Lower fingers after overview | Exit overview |
 | Escape | Immediate cancel and disengage |

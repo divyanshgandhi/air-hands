@@ -39,4 +39,15 @@ final class AppStore: ObservableObject {
             ))
         }
     }
+
+    func resetDemo() {
+        let demo = WorkspaceModel.demo
+        model.panels = demo.panels
+        model.selectedID = demo.selectedID
+        model.pointer = demo.pointer
+        model.isEngaged = false
+        model.isOverview = false
+        model.status = "Dormant"
+        objectWillChange.send()
+    }
 }

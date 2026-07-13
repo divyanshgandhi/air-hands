@@ -6,6 +6,8 @@ public enum InteractionEvent: Equatable, Sendable {
     case zoom(scaleDelta: Double)
     case switchWorkspace(direction: Int)
     case overview(Bool)
+    case minimizeSelected
+    case dismissSelected
     case cancelled
 }
 
@@ -44,6 +46,8 @@ public final class IntentArbiter {
         case let .zoom(scale): return .zoom(scaleDelta: scale)
         case let .switchWorkspace(direction): return .switchWorkspace(direction: direction)
         case let .overview(active): return .overview(active)
+        case .minimizeSelected: return .minimizeSelected
+        case .dismissSelected: return .dismissSelected
         }
     }
 }

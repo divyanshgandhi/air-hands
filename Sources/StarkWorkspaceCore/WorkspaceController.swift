@@ -35,6 +35,13 @@ public final class WorkspaceController {
         case let .overview(active):
             model.isOverview = active
             model.status = active ? "Overview" : "Engaged"
+        case .minimizeSelected:
+            guard let index = model.panels.firstIndex(where: { $0.id == model.selectedID }) else { return }
+            model.panels[index].isMinimized = true
+            switchPanel(direction: 1)
+        case .dismissSelected:
+            model.panels.removeAll { $0.id == model.selectedID }
+            model.selectedID = model.panels.max(by: { $0.zIndex < $1.zIndex })?.id
         case .cancelled:
             grabStart = nil
             model.isEngaged = false
@@ -44,11 +51,17 @@ public final class WorkspaceController {
     }
 
     private func selectPanel(at point: Point) {
-        model.selectedID = model.panels.filter { panel in
+        let selected = model.panels.filter { panel in
             let frame = panel.frame
             return !panel.isMinimized && point.x >= frame.x && point.x <= frame.x + frame.width &&
                 point.y >= frame.y && point.y <= frame.y + frame.height
         }.max(by: { $0.zIndex < $1.zIndex })?.id ?? model.selectedID
+        let changed = selected != model.selectedID
+        model.selectedID = selected
+        guard changed else { return }
+        if let index = model.panels.firstIndex(where: { $0.id == selected }) {
+            model.panels[index].zIndex = (model.panels.map(\.zIndex).max() ?? 0) + 1
+        }
     }
 
     private func moveGrab(to point: Point) {
