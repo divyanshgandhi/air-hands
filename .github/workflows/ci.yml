@@ -2,22 +2,32 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: macos-14
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
       - name: Build
         run: swift build
       - name: Build Stark workspace
         run: swift build --product stark-workspace
-      - name: Golden-vector conformance
-        run: swift run airhands-conformance
-      - name: Self-tests
-        run: swift run airhands-conformance --self
-      - name: Swift tests
+      - name: XCTest suite
         run: swift test
+      - name: Conformance (TS golden vectors)
+        run: swift run airhands-conformance
+      - name: Conformance self-tests
+        run: swift run airhands-conformance --self
