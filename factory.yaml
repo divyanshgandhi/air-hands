@@ -1,0 +1,43 @@
+# factory.yaml — v1 (schema: factory repo schemas/factory-v1.schema.json)
+name: air-hands
+level: 0                     # promoted to 1 only by human ruling (plan Task 8)
+status: advance
+surface: swift-package
+stack: [swift, swiftpm]
+private: false
+
+commands:
+  build: swift build
+  test: swift run airhands-conformance   # CLT-safe local variant
+  test-ci: swift test                     # full XCTest — CI runners only
+  deploy: ""                              # release = git tag (below)
+
+release:
+  kind: git-tag
+  notes: "semver annotated tags; GitHub Release with notes via gh"
+
+health:
+  kind: command
+  target: swift run airhands-conformance
+
+data:
+  stores: []
+  backup: ""
+  last-restore-drill: null
+
+guards:
+  push: allowed              # repo is public; confirmed by owner at Phase 1a execution
+  deploy: human-only
+
+costs:
+  monthly-usd: 0
+  ceiling-usd: 0
+
+secrets: []
+waivers:
+  - item: "Dependency update channel exists"
+    reason: "zero-dependency SwiftPM package; nothing to update until a dependency is added"
+    date: 2026-07-15
+
+owner: divyansh
+last-reviewed: 2026-07-15
